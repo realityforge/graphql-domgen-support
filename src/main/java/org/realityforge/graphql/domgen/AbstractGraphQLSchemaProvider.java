@@ -2,6 +2,7 @@ package org.realityforge.graphql.domgen;
 
 import com.coxautodev.graphql.tools.RootTypeInfo;
 import graphql.Scalars;
+import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectField;
@@ -17,7 +18,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.enterprise.concurrent.ContextService;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.TransactionManager;
 
 public abstract class AbstractGraphQLSchemaProvider
   implements GraphQLSchemaProvider
@@ -94,25 +97,28 @@ public abstract class AbstractGraphQLSchemaProvider
     registerScalarTypeUnlessRegistered( Scalars.GraphQLShort );
   }
 
-  protected void addFieldUnlessNull( @Nonnull final GraphQLInputObjectType.Builder objectType, @Nullable final GraphQLInputObjectField field )
+  protected void addFieldUnlessNull( @Nonnull final GraphQLInputObjectType.Builder objectType,
+                                     @Nullable final GraphQLInputObjectField field )
   {
-    if( null != field )
+    if ( null != field )
     {
       objectType.field( field );
     }
   }
 
-  protected void addFieldUnlessNull( @Nonnull final GraphQLInterfaceType.Builder objectType, @Nullable final GraphQLFieldDefinition field )
+  protected void addFieldUnlessNull( @Nonnull final GraphQLInterfaceType.Builder objectType,
+                                     @Nullable final GraphQLFieldDefinition field )
   {
-    if( null != field )
+    if ( null != field )
     {
       objectType.field( field );
     }
   }
 
-  protected void addFieldUnlessNull( @Nonnull final GraphQLObjectType.Builder objectType, @Nullable final GraphQLFieldDefinition field )
+  protected void addFieldUnlessNull( @Nonnull final GraphQLObjectType.Builder objectType,
+                                     @Nullable final GraphQLFieldDefinition field )
   {
-    if( null != field )
+    if ( null != field )
     {
       objectType.field( field );
     }
@@ -310,4 +316,33 @@ public abstract class AbstractGraphQLSchemaProvider
     }
     return objectType;
   }
+
+  @Nonnull
+  protected DataFetcher wrapTopLevelDataFetcher( @Nonnull final String key,
+                                                 final boolean wrapInTransaction,
+                                                 @Nonnull final ExceptingDataFetcher base )
+  {
+    return wrapTopLevelRawDataFetcher( key, wrapInTransaction, base.toDataFetcher() );
+  }
+
+  @Nonnull
+  protected DataFetcher wrapTopLevelRawDataFetcher( @Nonnull final String key,
+                                                    final boolean wrapInTransaction,
+                                                    @Nonnull final DataFetcher fetcher )
+  {
+    final DataFetcher wrapped = ( wrapInTransaction ) ? wrapInTransaction( key, fetcher ) : fetcher;
+    return getContextService().createContextualProxy( wrapped, DataFetcher.class );
+  }
+
+  @Nonnull
+  protected DataFetcher wrapInTransaction( @Nonnull final String key, @Nonnull final DataFetcher fetcher )
+  {
+    return new TransactionEnabledDataFetcher( getTransactionManager(), fetcher );
+  }
+
+  @Nonnull
+  protected abstract TransactionManager getTransactionManager();
+
+  @Nonnull
+  protected abstract ContextService getContextService();
 }
