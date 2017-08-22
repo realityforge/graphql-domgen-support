@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import javax.enterprise.concurrent.ContextService;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.TransactionManager;
+import org.jetbrains.annotations.Contract;
 
 public abstract class AbstractGraphQLSchemaProvider
   implements GraphQLSchemaProvider
@@ -345,4 +346,10 @@ public abstract class AbstractGraphQLSchemaProvider
 
   @Nonnull
   protected abstract ContextService getContextService();
+
+  @Contract( "null -> null; !null -> !null" )
+  protected Integer stringToInt( @Nullable final String value )
+  {
+    return null == value ? null : Integer.parseInt( value );
+  }
 }
