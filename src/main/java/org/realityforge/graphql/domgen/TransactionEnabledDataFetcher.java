@@ -52,9 +52,13 @@ public class TransactionEnabledDataFetcher
         }
       }
     }
+    catch ( final RuntimeException e )
+    {
+      throw e;
+    }
     catch ( final Exception e )
     {
-      throw new RuntimeException( e );
+      throw new WrapperRuntimeException( e );
     }
   }
 }

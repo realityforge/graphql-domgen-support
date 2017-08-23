@@ -18,9 +18,13 @@ public interface ExceptingDataFetcher<T>
       {
         return get( environment );
       }
+      catch ( final RuntimeException e )
+      {
+        throw e;
+      }
       catch ( final Exception e )
       {
-        throw new RuntimeException( e );
+        throw new WrapperRuntimeException( e );
       }
     };
   }
