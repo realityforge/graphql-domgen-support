@@ -1,4 +1,3 @@
-require 'buildr_plus'
 require 'buildr/git_auto_version'
 require 'buildr/gpg'
 
