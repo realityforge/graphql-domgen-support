@@ -1,7 +1,0 @@
-*.iml
-/*.ipr
-/*.iws
-/.rakeTasks
-/patch.diff
-/pkg
-/rdoc
