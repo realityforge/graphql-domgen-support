@@ -14,6 +14,12 @@
 
 BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
   f.enhance(:Config) do
+    attr_writer :enable_gwt_js_exports
+
+    def enable_gwt_js_exports?
+      @enable_gwt_js_exports.nil? ? false : !!@enable_gwt_js_exports
+    end
+
     def gwtc_java_args
       %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M)
     end
@@ -26,7 +32,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
       end
     end
 
-    def define_gwt_task(project, suffix = '', options = {})
+    def deps_for_gwt_compile(project)
       # Unfortunately buildr does not gracefully handle resource directories not being present
       # when project processed so we collect extra dependencies by looking at the generated directories
       extra_deps = project.iml.main_generated_resource_directories.flatten.compact.collect do |a|
@@ -35,10 +41,18 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
         a.is_a?(String) ? file(a) : a
       end
 
-      dependencies = project.compile.dependencies + [project.compile.target] + extra_deps
-      unless ENV['GWT'] == 'no'
+      project.compile.dependencies + [project.compile.target] + extra_deps
+    end
+
+    def define_gwt_task(project, suffix = '', options = {})
+      dependencies = deps_for_gwt_compile(project)
+      if ENV['GWT'].nil? || ENV['GWT'] == project.name
         project.gwt(project.determine_top_level_gwt_modules(suffix),
-                    {:java_args => BuildrPlus::Gwt.gwtc_java_args, :dependencies => dependencies}.merge(options))
+                    {
+                      :java_args => BuildrPlus::Gwt.gwtc_java_args,
+                      :dependencies => dependencies,
+                     :js_exports => BuildrPlus::Gwt.enable_gwt_js_exports?
+                    }.merge(options))
       end
     end
 
@@ -69,6 +83,31 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
       @top_level_gwt_modules ||= []
     end
 
+    #
+    # Used when you want to co-evolve two gwt libraries, one of which is in a different
+    # project. If this was not available then you would be forced to restart superdev mode
+    # each time the dependency was updated which can be painful.
+    #
+    # Add something like this into user-experience to achieve it.
+    #
+    # expand_dependency(Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client).select{|a|a.group == 'org.realityforge.replicant'})
+    #
+    def expand_dependency(artifacts)
+      artifacts = Buildr.artifacts([artifacts])
+      artifacts.each do |artifact|
+        key = artifact.group + '_' + artifact.id
+        target_directory = _(:generated, 'deps', key)
+        t = task(target_directory => [artifact]) do
+          rm_rf target_directory
+          unzip(target_directory => artifact).target.invoke
+        end
+        project.iml.main_generated_source_directories << target_directory
+        project.compile.from(target_directory)
+        project.compile.dependencies.delete(artifact)
+        task(':domgen:all').enhance([t.name])
+      end
+    end
+
     # Determine any top level modules.
     # If none specified then derive one based on root projects name and group
     def determine_top_level_gwt_modules(suffix)
@@ -97,7 +136,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
     def gwt_modules
       unless @gwt_modules
         @gwt_modules =
-          (project.iml.main_generated_resource_directories + project.resources.sources).uniq.collect do |path|
+          (project.iml.main_generated_source_directories + project.compile.sources + project.iml.main_generated_resource_directories + project.resources.sources).uniq.collect do |path|
             Dir["#{path}/**/*.gwt.xml"].collect do |gwt_module|
               length = path.to_s.length
               gwt_module[length + 1, gwt_module.length - length - 9].gsub('/', '.')

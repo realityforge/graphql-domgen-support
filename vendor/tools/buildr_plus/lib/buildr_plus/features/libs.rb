@@ -119,20 +119,44 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       self.jackson_core + self.jackson_databind + self.jackson_annotations
     end
 
+    def anodoc
+      %w(org.realityforge.anodoc:anodoc:jar:1.0.0)
+    end
+
+    def braincheck
+      %w(org.realityforge.braincheck:braincheck:jar:gwt:1.2.0)
+    end
+
     def jsinterop
       %w(com.google.jsinterop:jsinterop-annotations:jar:1.0.1 com.google.jsinterop:jsinterop-annotations:jar:sources:1.0.1)
     end
 
+    def jsinterop_base
+      %w(com.google.jsinterop:base:jar:1.0.0-beta-1 com.google.jsinterop:base:jar:sources:1.0.0-beta-1) + self.jsinterop
+    end
+
+    def elemental2_core
+      %w(com.google.elemental2:elemental2-core:jar:1.0.0-beta-1) + self.jsinterop_base
+    end
+
+    def elemental2_dom
+      %w(com.google.elemental2:elemental2-dom:jar:1.0.0-beta-1) + self.elemental2_core
+    end
+
+    def elemental2_promise
+      %w(com.google.elemental2:elemental2-promise:jar:1.0.0-beta-1) + self.elemental2_core
+    end
+
     def gwt_user
-      %w(com.google.gwt:gwt-user:jar:2.8.1 org.w3c.css:sac:jar:1.3) + self.jsinterop
+      %w(com.google.gwt:gwt-user:jar:2.8.2 org.w3c.css:sac:jar:1.3) + self.jsinterop
     end
 
     def gwt_servlet
-      %w(com.google.gwt:gwt-servlet:jar:2.8.1)
+      %w(com.google.gwt:gwt-servlet:jar:2.8.2)
     end
 
     def gwt_dev
-      'com.google.gwt:gwt-dev:jar:2.8.1'
+      'com.google.gwt:gwt-dev:jar:2.8.2'
     end
 
     def javax_inject
@@ -168,11 +192,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_appcache_client
-      %w(org.realityforge.gwt.appcache:gwt-appcache-client:jar:1.0.9 org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.9)
+      %w(org.realityforge.gwt.appcache:gwt-appcache-client:jar:1.0.11 org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.11)
     end
 
     def gwt_appcache_server
-      %w(org.realityforge.gwt.appcache:gwt-appcache-server:jar:1.0.9)
+      %w(org.realityforge.gwt.appcache:gwt-appcache-server:jar:1.0.11)
     end
 
     # The appcache code required to exist on gwt path during compilation
@@ -208,7 +232,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         self.jackson_databind +
         self.jackson_datatype_jdk8 +
         self.jackson_module_kotlin +
-      self.jetbrains_annotations
+        self.jetbrains_annotations
     end
 
     def graphql_java_servlet
@@ -217,6 +241,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         commons-fileupload:commons-fileupload:jar:1.3.3
         commons-io:commons-io:jar:2.5
       ) + self.graphql_java_tools
+    end
+
+    def graphql_domgen_support
+      %w(org.realityforge.keycloak.domgen:graphql-domgen-support:jar:1.2.0)
     end
 
     def antlr4_runtime
@@ -255,7 +283,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_gwt
-      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.1)
+      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.2)
     end
 
     def keycloak_domgen_support
@@ -295,7 +323,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '0.5.91'
+      '0.06'
     end
 
     def replicant_shared

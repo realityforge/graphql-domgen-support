@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-expected_versions = %w(1.5.3)
+expected_versions = %w(1.5.3 1.5.4)
 unless expected_versions.include?(Buildr::VERSION.to_s)
   raise "buildr_plus expected one of the Buildr versions #{expected_versions.join(', ')} but actual version is #{Buildr::VERSION}"
 end
@@ -66,6 +66,7 @@ require 'buildr_plus/features/geolatte'
 require 'buildr_plus/features/geotools'
 require 'buildr_plus/features/github'
 require 'buildr_plus/features/graphql'
+require 'buildr_plus/features/graphiql'
 require 'buildr_plus/features/gitignore'
 require 'buildr_plus/features/glassfish'
 require 'buildr_plus/features/guiceyloops'

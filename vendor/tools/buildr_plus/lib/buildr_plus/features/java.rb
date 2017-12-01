@@ -21,12 +21,25 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     def version
       @version || 8
     end
+
+    attr_writer :enable_annotation_processor
+
+    def enable_annotation_processor?
+      @enable_annotation_processor.nil? ? true : !!@enable_annotation_processor
+    end
   end
   f.enhance(:ProjectExtension) do
+    attr_writer :enable_annotation_processor
+
+    def enable_annotation_processor?
+      @enable_annotation_processor.nil? ? BuildrPlus::Java.enable_annotation_processor? : !!@enable_annotation_processor
+    end
+
     before_define do |project|
       project.compile.options.lint = 'all'
       project.compile.options.source = "1.#{BuildrPlus::Java.version}"
       project.compile.options.target = "1.#{BuildrPlus::Java.version}"
+      project.iml.instance_variable_set('@main_generated_source_directories',[])
     end
 
     after_define do |project|
@@ -34,7 +47,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
 
       t = project.task 'java:check' do
         (project.test.compile.sources + project.compile.sources).each do |src|
-          Dir.glob("#{src}/**/*").select { |f| File.directory? f }.each do |d|
+          Dir.glob("#{src}/**/*").select {|f| File.directory? f}.each do |d|
             dir = d[src.size + 1, 10000000]
             if dir.include?('.')
               raise "The directory #{d} included in java source path has a path component that includes the '.' character. This violates package name conventions."
@@ -43,6 +56,30 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
         end
       end
       project.task(':java:check').enhance([t.name])
+
+      if project.iml? && project.enable_annotation_processor?
+        project.iml.main_generated_source_directories << project._('generated/processors/main/java')
+      end
+
+      if project.ipr? && BuildrPlus::Java.enable_annotation_processor?
+        project.ipr.add_component('CompilerConfiguration') do |component|
+          component.annotationProcessing do |xml|
+            xml.profile(:default => true, :name => 'Default', :enabled => true) do
+              xml.sourceOutputDir :name => 'generated/processors/main/java'
+              xml.sourceTestOutputDir :name => 'generated/processors/test/java'
+              xml.outputRelativeToContentRoot :value => true
+            end
+            disabled = Buildr.projects(:no_invoke => true).select {|p| p.iml? && !p.enable_annotation_processor?}
+            unless disabled.empty?
+              xml.profile(:name => 'Disabled') do
+                disabled.each do |p|
+                  xml.module :name => p.name
+                end
+              end
+            end
+          end
+        end
+      end
     end
 
     desc 'Check the directories in java source tree do not have . character'

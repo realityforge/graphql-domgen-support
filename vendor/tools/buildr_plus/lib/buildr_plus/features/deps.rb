@@ -163,8 +163,24 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
+    def replicant_qa_generators
+      generators = []
+
+      generators += [:imit_client_main_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators.flatten
+    end
+
+    def replicant_qa_test_generators
+      generators = []
+
+      generators += [:imit_client_test_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators.flatten
+    end
+
     def gwt_generators
-      generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :auto_bean, :gwt_client_module, :gwt_client_gwt_model_module]
+      generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:imit_client_entity_gwt, :imit_client_dao_gwt, :imit_client_service] if BuildrPlus::FeatureManager.activated?(:replicant)
 
@@ -174,10 +190,32 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
+    def gwt_qa_generators
+      generators = [:gwt_rpc_module]
+      generators += [:gwt_client_main_jso_qa_support]
+      generators += [:imit_client_main_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators += self.replicant_qa_generators unless BuildrPlus::FeatureManager.activated?(:role_replicant_qa)
+
+      generators.flatten
+    end
+
+    def gwt_qa_test_generators
+      generators = [:gwt_rpc_test_module]
+      generators += [:gwt_client_test_jso_qa_support]
+      generators += [:imit_client_test_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators += self.replicant_qa_test_generators unless BuildrPlus::FeatureManager.activated?(:role_replicant_qa)
+
+      generators.flatten
+    end
+
     def user_experience_generators
       generators = [:gwt_client_event, :gwt_client_app, :gwt_client_gwt_modules, :gwt_client_test_ux_qa_support]
       generators += [:keycloak_gwt_app] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += self.gwt_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt)
+      generators += self.gwt_qa_test_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt_qa)
+
       generators.flatten
     end
 
@@ -220,7 +258,9 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_provided_deps
       dependencies = []
 
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_inject)
       dependencies << replicant_shared_provided_deps if BuildrPlus::FeatureManager.activated?(:replicant)
 
       dependencies.flatten
@@ -294,7 +334,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.ee_provided)
 
       # Our JPA beans are occasionally generated with eclipselink specific artifacts
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded) if BuildrPlus::FeatureManager.activated?(:db)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded) if BuildrPlus::FeatureManager.activated?(:db) || BuildrPlus::FeatureManager.activated?(:jackson)
 
       dependencies.flatten
     end
@@ -385,7 +425,10 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_appcache_server) if BuildrPlus::FeatureManager.activated?(:appcache)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_servlet) if BuildrPlus::FeatureManager.activated?(:graphql)
+      if BuildrPlus::FeatureManager.activated?(:graphql)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_servlet)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_domgen_support)
+      end
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.simple_keycloak_service)
