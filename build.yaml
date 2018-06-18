@@ -7,4 +7,4 @@ repositories:
 artifacts:
   javaee_api: javax:javaee-api:jar:7.0
 
-  jsr305: com.google.code.findbugs:jsr305:jar:3.0.0
+  jsr305: org.realityforge.javax.annotation:javax.annotation:jar:1.0.0
