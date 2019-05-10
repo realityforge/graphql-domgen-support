@@ -39,7 +39,7 @@ public abstract class AbstractGraphQLSchemaProvider
   }
 
   @Override
-  public GraphQLSchema getSchema( final HttpServletRequest request )
+  public GraphQLSchema getSchema( @Nonnull final HttpServletRequest request )
   {
     return _schema;
   }
