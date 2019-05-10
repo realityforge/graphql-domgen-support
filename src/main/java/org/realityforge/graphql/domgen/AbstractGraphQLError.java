@@ -41,16 +41,27 @@ public abstract class AbstractGraphQLError
     return _errorType;
   }
 
-  @SuppressWarnings( "EqualsWhichDoesntCheckParameterClass" )
   @Override
-  public boolean equals( Object o )
+  public boolean equals( final Object o )
   {
-    return Helper.equals( this, o );
+    if ( this == o )
+    {
+      return true;
+    }
+    else if ( !( o instanceof AbstractGraphQLError ) )
+    {
+      return false;
+    }
+    else
+    {
+      final AbstractGraphQLError that = (AbstractGraphQLError) o;
+      return Objects.equals( _message, that._message ) && _errorType == that._errorType;
+    }
   }
 
   @Override
   public int hashCode()
   {
-    return Helper.hashCode( this );
+    return Objects.hash( _message, _errorType );
   }
 }
