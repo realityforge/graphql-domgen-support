@@ -2,68 +2,48 @@ package org.realityforge.graphql.domgen;
 
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
-import graphql.execution.NonNullableFieldWasNullException;
-import graphql.execution.instrumentation.Instrumentation;
-import graphql.execution.instrumentation.NoOpInstrumentation;
-import graphql.schema.GraphQLSchema;
-import graphql.servlet.DefaultExecutionStrategyProvider;
-import graphql.servlet.ExecutionStrategyProvider;
-import graphql.servlet.GraphQLContext;
-import graphql.servlet.GraphQLServlet;
+import graphql.servlet.AbstractGraphQLHttpServlet;
+import graphql.servlet.GraphQLInvocationInputFactory;
+import graphql.servlet.GraphQLObjectMapper;
+import graphql.servlet.GraphQLQueryInvoker;
+import graphql.servlet.GraphQLSchemaProvider;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.persistence.NoResultException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public abstract class AbstractDomgenGraphQLEndpoint
-  extends GraphQLServlet
+  extends AbstractGraphQLHttpServlet
 {
-  private final DefaultExecutionStrategyProvider _executionStrategyProvider = new DefaultExecutionStrategyProvider();
+  @Nonnull
+  private final GraphQLQueryInvoker _invoker = GraphQLQueryInvoker.newBuilder().build();
+  @Nonnull
+  private final GraphQLInvocationInputFactory _invocationInputFactory =
+    GraphQLInvocationInputFactory.newBuilder( this::getSchemaProvider ).build();
+  @Nonnull
+  private final GraphQLObjectMapper _mapper = GraphQLObjectMapper.newBuilder().build();
 
-  @Override
-  protected GraphQLContext createContext( final Optional<HttpServletRequest> request,
-                                          final Optional<HttpServletResponse> response )
-  {
-    return new GraphQLContext( request, response );
-  }
+  @Nonnull
+  protected abstract GraphQLSchemaProvider getSchemaProvider();
 
+  @Nonnull
   @Override
-  protected ExecutionStrategyProvider getExecutionStrategyProvider()
+  protected GraphQLQueryInvoker getQueryInvoker()
   {
-    return _executionStrategyProvider;
-  }
-
-  @Override
-  protected Instrumentation getInstrumentation()
-  {
-    return NoOpInstrumentation.INSTANCE;
-  }
-
-  @Override
-  protected Map<String, Object> transformVariables( final GraphQLSchema schema,
-                                                    final String query,
-                                                    final Map<String, Object> variables )
-  {
-    return variables;
+    return _invoker;
   }
 
   @Nonnull
   @Override
-  protected List<GraphQLError> filterGraphQLErrors( @Nonnull final List<GraphQLError> errors )
+  protected GraphQLInvocationInputFactory getInvocationInputFactory()
   {
-    return errors.stream().
-      filter( e -> e instanceof ExceptionWhileDataFetching ||
-                   e instanceof NonNullableFieldWasNullException ||
-                   isClientError( e ) ).
-      map( e -> e instanceof ExceptionWhileDataFetching ? wrapDataFetcherError( (ExceptionWhileDataFetching) e ) : e ).
-      map( e -> e instanceof NonNullableFieldWasNullException ? new DataFetchingError( e.getMessage() ) : e ).
-      collect( Collectors.toList() );
+    return _invocationInputFactory;
+  }
+
+  @Override
+  protected GraphQLObjectMapper getGraphQLObjectMapper()
+  {
+    return _mapper;
   }
 
   @Nonnull

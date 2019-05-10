@@ -20,6 +20,7 @@ import javax.annotation.Nullable;
 import javax.enterprise.concurrent.ContextService;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.TransactionManager;
+import javax.websocket.server.HandshakeRequest;
 
 public abstract class AbstractGraphQLSchemaProvider
   implements GraphQLSchemaProvider
@@ -40,6 +41,12 @@ public abstract class AbstractGraphQLSchemaProvider
   public GraphQLSchema getSchema( @Nonnull final HttpServletRequest request )
   {
     return _schema;
+  }
+
+  @Override
+  public GraphQLSchema getSchema( @Nonnull final HandshakeRequest request )
+  {
+    return getSchema();
   }
 
   @Override
@@ -75,7 +82,8 @@ public abstract class AbstractGraphQLSchemaProvider
       query( query ).
       mutation( mutation ).
       subscription( subscription ).
-      build( dictionary );
+      additionalTypes( dictionary ).
+      build();
   }
 
   protected abstract void populateGraphQLSchema();
