@@ -26,16 +26,7 @@ GRAPHQL_TOOLS_DEPS = %w(
   ru.vyarus:generics-resolver:jar:2.0.1
 )
 
-REPLICANT_DEPS = %w(
-  com.fasterxml.jackson.core:jackson-annotations:jar:2.8.8
-  com.fasterxml.jackson.core:jackson-core:jar:2.8.8
-  com.fasterxml.jackson.core:jackson-databind:jar:2.8.8
-  com.google.gwt:gwt-servlet:jar:2.8.2
-  org.realityforge.gwt.datatypes:gwt-datatypes:jar:0.9
-  org.realityforge.replicant:replicant-server:jar:0.06
-  org.realityforge.replicant:replicant-shared-ee:jar:0.06
-  org.realityforge.replicant:replicant-shared:jar:0.06
-)
+REPLICANT_DEPS = %w(org.realityforge.replicant:replicant-server:jar:6.43)
 
 desc 'GraphQL Domgen Support'
 define 'graphql-domgen-support' do

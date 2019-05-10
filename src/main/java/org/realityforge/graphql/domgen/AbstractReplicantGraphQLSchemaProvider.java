@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import org.realityforge.replicant.server.EntityMessageEndpoint;
+import org.realityforge.replicant.server.transport.ReplicantSessionManager;
 
 public abstract class AbstractReplicantGraphQLSchemaProvider
   extends AbstractGraphQLSchemaProvider
@@ -12,13 +13,18 @@ public abstract class AbstractReplicantGraphQLSchemaProvider
   @Nonnull
   protected DataFetcher wrapInTransaction( @Nonnull final String key, @Nonnull final DataFetcher fetcher )
   {
-    return super.wrapInTransaction( key,
-                                    new ReplicantEnabledDataFetcher( getEndpoint(),
-                                                                     getEntityManager(),
-                                                                     getRegistry(),
-                                                                     key,
-                                                                     fetcher ) );
+    final ReplicantEnabledDataFetcher replicantEnabledDataFetcher =
+      new ReplicantEnabledDataFetcher( getReplicantSessionManager(),
+                                       getEndpoint(),
+                                       getEntityManager(),
+                                       getRegistry(),
+                                       key,
+                                       fetcher );
+    return super.wrapInTransaction( key, replicantEnabledDataFetcher );
   }
+
+  @Nonnull
+  protected abstract ReplicantSessionManager getReplicantSessionManager();
 
   @Nonnull
   protected abstract TransactionSynchronizationRegistry getRegistry();
