@@ -29,7 +29,6 @@ public abstract class AbstractGraphQLSchemaProvider
   private final HashMap<String, GraphQLInterfaceType> _interfaceTypes = new HashMap<>();
   private final HashMap<String, GraphQLInputType> _inputTypes = new HashMap<>();
   private final HashMap<String, GraphQLObjectType> _objectTypes = new HashMap<>();
-
   private GraphQLSchema _schema;
 
   protected void postConstruct()
