@@ -1,6 +1,5 @@
 package org.realityforge.graphql.domgen;
 
-import com.coxautodev.graphql.tools.RootTypeInfo;
 import graphql.Scalars;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLEnumType;
@@ -60,13 +59,13 @@ public abstract class AbstractGraphQLSchemaProvider
   private GraphQLSchema buildGraphQLSchema()
   {
     populateGraphQLSchema();
-    final GraphQLObjectType query = _objectTypes.get( RootTypeInfo.DEFAULT_QUERY_NAME );
+    final GraphQLObjectType query = _objectTypes.get( "Query" );
     if ( null == query )
     {
       throw new IllegalStateException( "Unable to build schema as no Query object type has been defined" );
     }
-    final GraphQLObjectType mutation = _objectTypes.get( RootTypeInfo.DEFAULT_MUTATION_NAME );
-    final GraphQLObjectType subscription = _objectTypes.get( RootTypeInfo.DEFAULT_SUBSCRIPTION_NAME );
+    final GraphQLObjectType mutation = _objectTypes.get( "Mutation" );
+    final GraphQLObjectType subscription = _objectTypes.get( "Subscription" );
     final HashSet<GraphQLType> dictionary = new HashSet<>();
     dictionary.addAll( _scalarTypes.values() );
     dictionary.addAll( _enumTypes.values() );
