@@ -21,11 +21,17 @@ import org.realityforge.replicant.server.transport.ReplicantSessionManager;
 public class ReplicantEnabledDataFetcher
   implements DataFetcher
 {
+  @Nonnull
   private final ReplicantSessionManager _sessionManager;
+  @Nonnull
   private final EntityMessageEndpoint _endpoint;
+  @Nonnull
   private final EntityManager _entityManager;
+  @Nonnull
   private final TransactionSynchronizationRegistry _registry;
+  @Nonnull
   private final String _name;
+  @Nonnull
   private final DataFetcher _fetcher;
 
   ReplicantEnabledDataFetcher( @Nonnull final ReplicantSessionManager sessionManager,
