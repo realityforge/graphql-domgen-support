@@ -47,13 +47,6 @@ public abstract class AbstractDomgenGraphQLEndpoint
   }
 
   @Nonnull
-  protected GraphQLError wrapDataFetcherError( @Nonnull final ExceptionWhileDataFetching e )
-  {
-    final Throwable t = unwrap( e.getException() );
-    return throwableToError( t );
-  }
-
-  @Nonnull
   private GraphQLError throwableToError( @Nonnull final Throwable t )
   {
     if ( t instanceof NoResultException )
