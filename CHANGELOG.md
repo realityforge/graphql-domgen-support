@@ -9,6 +9,7 @@
 * Remove `WrapperRuntimeException` now that it is unused.
 * Remove unused methods from `AbstractDomgenGraphQLEndpoint` which includes; `wrapDataFetcherError(...)`,
   `getMessage(...)`, `throwableToError(...)`, `unwrap(...)` and `isWrapperException(...)`.
+* Remove unused class `ValidationError`.
 
 ### [v1.3.0](https://github.com/realityforge/graphql-domgen-support/tree/v1.3.0) (2019-05-10)
 [Full Changelog](https://github.com/realityforge/graphql-domgen-support/compare/v1.2.0...v1.3.0)
