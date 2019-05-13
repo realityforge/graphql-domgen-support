@@ -1,0 +1,61 @@
+package org.realityforge.graphql.domgen;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.idl.RuntimeWiring;
+import graphql.servlet.DefaultGraphQLSchemaProvider;
+import graphql.servlet.GraphQLSchemaProvider;
+import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.enterprise.concurrent.ContextService;
+import javax.transaction.TransactionManager;
+
+public abstract class AbstractGraphQLSchemaService
+  implements GraphQLSchemaService
+{
+  @Nullable
+  private GraphQLSchemaProvider _schemaProvider;
+
+  protected void initSchemaProvider()
+  {
+    _schemaProvider =
+      new DefaultGraphQLSchemaProvider( SchemaUtil.buildGraphQLSchema( getSchemaResources(), this::wireSchema ) );
+  }
+
+  protected abstract void wireSchema( @Nonnull final RuntimeWiring.Builder builder );
+
+  @Nonnull
+  @Override
+  public GraphQLSchemaProvider getProvider()
+  {
+    assert null != _schemaProvider;
+    return _schemaProvider;
+  }
+
+  /**
+   * Return an ordered set of java resources that contain .graphqls files to define the schema.
+   */
+  @Nonnull
+  protected abstract List<String> getSchemaResources();
+
+  @Nonnull
+  protected DataFetcher topLevelDataFetcher( @Nonnull final String key,
+                                             final boolean wrapInTransaction,
+                                             @Nonnull final DataFetcher fetcher )
+  {
+    final DataFetcher dataFetcher = wrapInTransaction ? wrapInTransaction( key, fetcher ) : fetcher;
+    return getContextService().createContextualProxy( dataFetcher, DataFetcher.class );
+  }
+
+  @Nonnull
+  protected DataFetcher wrapInTransaction( @Nonnull final String key, @Nonnull final DataFetcher fetcher )
+  {
+    return new TransactionEnabledDataFetcher( getTransactionManager(), fetcher );
+  }
+
+  @Nonnull
+  protected abstract TransactionManager getTransactionManager();
+
+  @Nonnull
+  protected abstract ContextService getContextService();
+}

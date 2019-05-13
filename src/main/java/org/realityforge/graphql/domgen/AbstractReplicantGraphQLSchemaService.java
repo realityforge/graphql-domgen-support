@@ -7,8 +7,8 @@ import javax.transaction.TransactionSynchronizationRegistry;
 import org.realityforge.replicant.server.EntityMessageEndpoint;
 import org.realityforge.replicant.server.transport.ReplicantSessionManager;
 
-public abstract class AbstractReplicantGraphQLSchemaProvider
-  extends AbstractGraphQLSchemaProvider
+public abstract class AbstractReplicantGraphQLSchemaService
+  extends AbstractGraphQLSchemaService
 {
   @Nonnull
   protected DataFetcher wrapInTransaction( @Nonnull final String key, @Nonnull final DataFetcher fetcher )
