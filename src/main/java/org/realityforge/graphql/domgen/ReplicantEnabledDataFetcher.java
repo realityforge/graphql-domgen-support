@@ -50,28 +50,18 @@ public class ReplicantEnabledDataFetcher
   }
 
   @Override
-  public Object get( final DataFetchingEnvironment environment )
+  public Object get( @Nonnull final DataFetchingEnvironment environment )
+    throws Exception
   {
     final String sessionId = (String) ReplicantContextHolder.remove( ServerConstants.SESSION_ID_KEY );
     final Integer requestId = (Integer) ReplicantContextHolder.remove( ServerConstants.REQUEST_ID_KEY );
     final ReplicantSession session = null != sessionId ? _sessionManager.getSession( sessionId ) : null;
-    try
-    {
-      return ReplicationRequestUtil.runRequest( _registry,
-                                                _entityManager,
-                                                _endpoint,
-                                                _name,
-                                                session,
-                                                requestId,
-                                                () -> _fetcher.get( environment ) );
-    }
-    catch ( final RuntimeException e )
-    {
-      throw e;
-    }
-    catch ( final Exception e )
-    {
-      throw new WrapperRuntimeException( e );
-    }
+    return ReplicationRequestUtil.runRequest( _registry,
+                                              _entityManager,
+                                              _endpoint,
+                                              _name,
+                                              session,
+                                              requestId,
+                                              () -> _fetcher.get( environment ) );
   }
 }

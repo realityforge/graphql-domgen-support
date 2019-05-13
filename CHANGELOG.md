@@ -3,6 +3,9 @@
 ### Unreleased
 
 * Remove `ExceptingDataFetcher` as the `DataFetcher` supplied by `graphql-java` now throws an exception.
+* Update the `ReplicantEnabledDataFetcher` class and the `TransactionEnabledDataFetcher` class to throw
+  exceptions directly rather than wrapping in a `WrapperRuntimeException` now that the underlying `DataFetcher`
+  supplied by the `graphql-java` library throws an exception.
 
 ### [v1.3.0](https://github.com/realityforge/graphql-domgen-support/tree/v1.3.0) (2019-05-10)
 [Full Changelog](https://github.com/realityforge/graphql-domgen-support/compare/v1.2.0...v1.3.0)

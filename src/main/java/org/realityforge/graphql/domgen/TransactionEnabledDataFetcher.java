@@ -26,39 +26,29 @@ public class TransactionEnabledDataFetcher
   }
 
   @Override
-  public Object get( final DataFetchingEnvironment environment )
+  public Object get( @Nonnull final DataFetchingEnvironment environment )
+    throws Exception
   {
+    _transactionManager.begin();
     try
     {
-      _transactionManager.begin();
-      try
-      {
-        return _fetcher.get( environment );
-      }
-      catch ( final Exception e )
-      {
-        _transactionManager.setRollbackOnly();
-        throw e;
-      }
-      finally
-      {
-        if ( Status.STATUS_ACTIVE == _transactionManager.getStatus() )
-        {
-          _transactionManager.commit();
-        }
-        else
-        {
-          _transactionManager.rollback();
-        }
-      }
-    }
-    catch ( final RuntimeException e )
-    {
-      throw e;
+      return _fetcher.get( environment );
     }
     catch ( final Exception e )
     {
-      throw new WrapperRuntimeException( e );
+      _transactionManager.setRollbackOnly();
+      throw e;
+    }
+    finally
+    {
+      if ( Status.STATUS_ACTIVE == _transactionManager.getStatus() )
+      {
+        _transactionManager.commit();
+      }
+      else
+      {
+        _transactionManager.rollback();
+      }
     }
   }
 }
