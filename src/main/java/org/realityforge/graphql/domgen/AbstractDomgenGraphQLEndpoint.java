@@ -1,16 +1,11 @@
 package org.realityforge.graphql.domgen;
 
-import graphql.ExceptionWhileDataFetching;
-import graphql.GraphQLError;
 import graphql.servlet.AbstractGraphQLHttpServlet;
 import graphql.servlet.GraphQLInvocationInputFactory;
 import graphql.servlet.GraphQLObjectMapper;
 import graphql.servlet.GraphQLQueryInvoker;
 import graphql.servlet.GraphQLSchemaProvider;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.UndeclaredThrowableException;
 import javax.annotation.Nonnull;
-import javax.persistence.NoResultException;
 
 public abstract class AbstractDomgenGraphQLEndpoint
   extends AbstractGraphQLHttpServlet
@@ -44,40 +39,5 @@ public abstract class AbstractDomgenGraphQLEndpoint
   protected GraphQLObjectMapper getGraphQLObjectMapper()
   {
     return _mapper;
-  }
-
-  @Nonnull
-  private GraphQLError throwableToError( @Nonnull final Throwable t )
-  {
-    if ( t instanceof NoResultException )
-    {
-      return new ValidationError( "Failed to load expected entity in database" );
-    }
-    else
-    {
-      return new DataFetchingError( getMessage( t ) );
-    }
-  }
-
-  @Nonnull
-  protected String getMessage( @Nonnull final Throwable t )
-  {
-    return "Exception while fetching data: " + t;
-  }
-
-  @Nonnull
-  protected Throwable unwrap( @Nonnull final Throwable root )
-  {
-    Throwable t = root;
-    while ( isWrapperException( t ) && null != t.getCause() )
-    {
-      t = t.getCause();
-    }
-    return t;
-  }
-
-  protected boolean isWrapperException( @Nonnull final Throwable t )
-  {
-    return t instanceof UndeclaredThrowableException || t instanceof InvocationTargetException;
   }
 }
