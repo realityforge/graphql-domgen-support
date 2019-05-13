@@ -18,8 +18,8 @@ import org.realityforge.replicant.server.transport.ReplicantSessionManager;
  * It should be used for top-level fetchers where the nested fetcher is not called across a boundary
  * and thus will not have replicant context initialized. It should already have the transaction established.
  */
-public class ReplicantEnabledDataFetcher
-  implements DataFetcher
+public class ReplicantEnabledDataFetcher<T>
+  implements DataFetcher<T>
 {
   @Nonnull
   private final ReplicantSessionManager _sessionManager;
@@ -32,14 +32,14 @@ public class ReplicantEnabledDataFetcher
   @Nonnull
   private final String _name;
   @Nonnull
-  private final DataFetcher _fetcher;
+  private final DataFetcher<T> _fetcher;
 
   ReplicantEnabledDataFetcher( @Nonnull final ReplicantSessionManager sessionManager,
                                @Nonnull final EntityMessageEndpoint endpoint,
                                @Nonnull final EntityManager entityManager,
                                @Nonnull final TransactionSynchronizationRegistry registry,
                                @Nonnull final String name,
-                               @Nonnull final DataFetcher fetcher )
+                               @Nonnull final DataFetcher<T> fetcher )
   {
     _sessionManager = Objects.requireNonNull( sessionManager );
     _endpoint = Objects.requireNonNull( endpoint );
@@ -50,7 +50,7 @@ public class ReplicantEnabledDataFetcher
   }
 
   @Override
-  public Object get( @Nonnull final DataFetchingEnvironment environment )
+  public T get( @Nonnull final DataFetchingEnvironment environment )
     throws Exception
   {
     final String sessionId = (String) ReplicantContextHolder.remove( ServerConstants.SESSION_ID_KEY );

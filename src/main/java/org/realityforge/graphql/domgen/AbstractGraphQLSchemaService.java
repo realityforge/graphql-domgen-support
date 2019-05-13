@@ -39,18 +39,19 @@ public abstract class AbstractGraphQLSchemaService
   protected abstract List<String> getSchemaResources();
 
   @Nonnull
-  protected DataFetcher topLevelDataFetcher( @Nonnull final String key,
+  protected <T> DataFetcher<T> topLevelDataFetcher( @Nonnull final String key,
                                              final boolean wrapInTransaction,
-                                             @Nonnull final DataFetcher fetcher )
+                                             @Nonnull final DataFetcher<T> fetcher )
   {
     final DataFetcher dataFetcher = wrapInTransaction ? wrapInTransaction( key, fetcher ) : fetcher;
-    return getContextService().createContextualProxy( dataFetcher, DataFetcher.class );
+    //noinspection unchecked
+    return (DataFetcher<T>) getContextService().createContextualProxy( dataFetcher, DataFetcher.class );
   }
 
   @Nonnull
-  protected DataFetcher wrapInTransaction( @Nonnull final String key, @Nonnull final DataFetcher fetcher )
+  protected <T> DataFetcher<T> wrapInTransaction( @Nonnull final String key, @Nonnull final DataFetcher<T> fetcher )
   {
-    return new TransactionEnabledDataFetcher( getTransactionManager(), fetcher );
+    return new TransactionEnabledDataFetcher<>( getTransactionManager(), fetcher );
   }
 
   @Nonnull

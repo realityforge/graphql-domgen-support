@@ -11,7 +11,7 @@ public abstract class AbstractReplicantGraphQLSchemaService
   extends AbstractGraphQLSchemaService
 {
   @Nonnull
-  protected DataFetcher wrapInTransaction( @Nonnull final String key, @Nonnull final DataFetcher fetcher )
+  protected <T> DataFetcher<T> wrapInTransaction( @Nonnull final String key, @Nonnull final DataFetcher<T> fetcher )
   {
     final ReplicantEnabledDataFetcher replicantEnabledDataFetcher =
       new ReplicantEnabledDataFetcher( getReplicantSessionManager(),

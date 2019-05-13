@@ -12,27 +12,27 @@ import javax.transaction.TransactionManager;
  * It should be used for top-level fetchers where the nested fetcher is not called across a boundary
  * and thus will not have transaction context initialized.
  */
-public class TransactionEnabledDataFetcher
-  implements DataFetcher
+public class TransactionEnabledDataFetcher<T>
+  implements DataFetcher<T>
 {
   private final TransactionManager _transactionManager;
-  private final DataFetcher _fetcher;
+  private final DataFetcher<T> _fetcher;
 
   public TransactionEnabledDataFetcher( @Nonnull final TransactionManager transactionManager,
-                                        @Nonnull final DataFetcher fetcher )
+                                        @Nonnull final DataFetcher<T> fetcher )
   {
     _transactionManager = Objects.requireNonNull( transactionManager );
     _fetcher = Objects.requireNonNull( fetcher );
   }
 
   @Override
-  public Object get( @Nonnull final DataFetchingEnvironment environment )
+  public T get( @Nonnull final DataFetchingEnvironment environment )
     throws Exception
   {
     _transactionManager.begin();
     try
     {
-      return _fetcher.get( environment );
+      return (T) _fetcher.get( environment );
     }
     catch ( final Exception e )
     {
