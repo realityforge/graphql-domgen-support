@@ -85,8 +85,6 @@ public abstract class AbstractDomgenGraphQLEndpoint
 
   protected boolean isWrapperException( @Nonnull final Throwable t )
   {
-    return t instanceof UndeclaredThrowableException ||
-           t instanceof InvocationTargetException ||
-           t instanceof WrapperRuntimeException;
+    return t instanceof UndeclaredThrowableException || t instanceof InvocationTargetException;
   }
 }
