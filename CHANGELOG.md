@@ -11,6 +11,7 @@
   `getMessage(...)`, `throwableToError(...)`, `unwrap(...)` and `isWrapperException(...)`.
 * Remove unused class `ValidationError`.
 * Remove unused class `DataFetchingError`.
+* Remove unused class `AbstractGraphQLError`.
 
 ### [v1.3.0](https://github.com/realityforge/graphql-domgen-support/tree/v1.3.0) (2019-05-10)
 [Full Changelog](https://github.com/realityforge/graphql-domgen-support/compare/v1.2.0...v1.3.0)
