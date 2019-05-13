@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+* Remove `ExceptingDataFetcher` as the `DataFetcher` supplied by `graphql-java` now throws an exception.
+
 ### [v1.3.0](https://github.com/realityforge/graphql-domgen-support/tree/v1.3.0) (2019-05-10)
 [Full Changelog](https://github.com/realityforge/graphql-domgen-support/compare/v1.2.0...v1.3.0)
 

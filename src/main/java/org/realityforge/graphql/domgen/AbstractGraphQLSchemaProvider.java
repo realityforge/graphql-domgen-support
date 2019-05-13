@@ -324,14 +324,6 @@ public abstract class AbstractGraphQLSchemaProvider
   }
 
   @Nonnull
-  protected DataFetcher wrapTopLevelDataFetcher( @Nonnull final String key,
-                                                 final boolean wrapInTransaction,
-                                                 @Nonnull final ExceptingDataFetcher base )
-  {
-    return wrapTopLevelRawDataFetcher( key, wrapInTransaction, base.toDataFetcher() );
-  }
-
-  @Nonnull
   protected DataFetcher wrapTopLevelRawDataFetcher( @Nonnull final String key,
                                                     final boolean wrapInTransaction,
                                                     @Nonnull final DataFetcher fetcher )
