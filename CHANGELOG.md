@@ -1,6 +1,7 @@
 # Change Log
 
-### Unreleased
+### [v1.6.0](https://github.com/realityforge/graphql-domgen-support/tree/v1.6.0) (2019-08-14)
+[Full Changelog](https://github.com/realityforge/graphql-domgen-support/compare/v1.5.0...v1.6.0)
 
 * Improve the error handling when parsing and serializing scalars.
 
