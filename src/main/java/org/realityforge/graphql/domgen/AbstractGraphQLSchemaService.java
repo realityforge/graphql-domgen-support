@@ -2,8 +2,8 @@ package org.realityforge.graphql.domgen;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.idl.RuntimeWiring;
-import graphql.servlet.DefaultGraphQLSchemaProvider;
-import graphql.servlet.GraphQLSchemaProvider;
+import graphql.servlet.config.DefaultGraphQLSchemaProvider;
+import graphql.servlet.config.GraphQLSchemaProvider;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

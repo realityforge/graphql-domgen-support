@@ -10,3 +10,19 @@ artifacts:
   javaee_api: javax:javaee-api:jar:7.0
 
   jsr305: org.realityforge.javax.annotation:javax.annotation:jar:1.0.0
+
+  jackson_annotations: com.fasterxml.jackson.core:jackson-annotations:jar:2.9.9
+  jackson_core: com.fasterxml.jackson.core:jackson-core:jar:2.9.9
+  jackson_databind: com.fasterxml.jackson.core:jackson-databind:jar:2.9.9
+  jackson_datatype_jdk8: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.9.9
+
+  replicant: org.realityforge.replicant:replicant-server:jar:6.43
+
+  graphql_java: com.graphql-java:graphql-java:jar:13.0
+  slf4j_api: org.slf4j:slf4j-api:jar:1.7.25
+  slf4j_jdk14: org.slf4j:slf4j-jdk14:jar:1.7.25
+  antlr4_runtime: org.antlr:antlr4-runtime:jar:4.7.2
+  java_dataloader: com.graphql-java:java-dataloader:jar:2.1.1
+  reactive_streams: org.reactivestreams:reactive-streams:jar:1.0.2
+  graphql_java_servlet: com.graphql-java-kickstart:graphql-java-servlet:jar:8.0.0
+  guava: com.google.guava:guava:jar:25.0-jre

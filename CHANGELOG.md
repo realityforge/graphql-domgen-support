@@ -2,6 +2,9 @@
 
 ### Unreleased
 
+* Upgrade the `graphql-java-servlet` artifact to version `8.0.0` which involved changing the artifact coordinates to `com.graphql-java-kickstart:graphql-java-servlet:jar:8.0.0`.
+* Upgrade the `graphql-java` artifact to version `13.0`.
+
 ### [v1.7.0](https://github.com/realityforge/graphql-domgen-support/tree/v1.7.0) (2019-08-15)
 [Full Changelog](https://github.com/realityforge/graphql-domgen-support/compare/v1.6.0...v1.7.0)
 
