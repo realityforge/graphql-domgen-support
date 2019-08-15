@@ -1,7 +1,6 @@
 package org.realityforge.graphql.domgen;
 
 import graphql.language.IntValue;
-import graphql.language.NullValue;
 import graphql.language.StringValue;
 import graphql.schema.Coercing;
 import graphql.schema.CoercingParseLiteralException;
@@ -35,8 +34,9 @@ public final class Scalars
   private static class DateTimeCoercing
     implements Coercing<Date, String>
   {
+    @Nonnull
     @Override
-    public String serialize( final Object input )
+    public String serialize( @Nonnull final Object input )
     {
       try
       {
@@ -49,39 +49,47 @@ public final class Scalars
       }
     }
 
+    @Nonnull
     @Override
-    public Date parseValue( final Object input )
+    public Date parseValue( @Nonnull final Object input )
     {
-      if ( input instanceof StringValue )
+      final Date date = doParseValue( input );
+      if ( isInvalidYear( date ) )
       {
-        final String value = ( (StringValue) input ).getValue();
+        final String message = "Date value " + input + " must be between January 1, 1753 and December 31, 9999.";
+        throw new CoercingParseValueException( message );
+      }
+
+      return date;
+    }
+
+    @Nonnull
+    private Date doParseValue( @Nonnull final Object input )
+    {
+      if ( input instanceof String )
+      {
         try
         {
-          return parseDate( value );
+          return parseDate( (String) input );
         }
         catch ( final Throwable t )
         {
-          final String message = "Error parsing value '" + value + "'. Expected to be in the ISO date-time " +
+          final String message = "Error parsing value '" + input + "'. Expected to be in the ISO date-time " +
                                  "format with an offset, such as '2011-12-03T10:15:30+01:00'";
           throw new CoercingParseValueException( message );
         }
       }
-      else if ( input instanceof IntValue )
+      else if ( input instanceof Number )
       {
-        final BigInteger value = ( (IntValue) input ).getValue();
         try
         {
-          return parseDate( value );
+          return parseDate( ( (Number) input ).longValue() );
         }
         catch ( final Throwable t )
         {
-          final String message = "Error parsing value '" + value + "'. Expected to be in milliseconds since Epoch";
+          final String message = "Error parsing literal '" + input + "'. Expected to be in milliseconds since Epoch";
           throw new CoercingParseValueException( message );
         }
-      }
-      else if ( input instanceof NullValue )
-      {
-        return null;
       }
       else
       {
@@ -91,8 +99,22 @@ public final class Scalars
       }
     }
 
+    @Nonnull
     @Override
-    public Date parseLiteral( final Object input )
+    public Date parseLiteral( @Nonnull final Object input )
+    {
+      final Date date = doParseLiteral( input );
+      if ( isInvalidYear( date ) )
+      {
+        final String message = "Date value " + input + " must be between January 1, 1753 and December 31, 9999.";
+        throw new CoercingParseLiteralException( message );
+      }
+
+      return date;
+    }
+
+    @Nonnull
+    private Date doParseLiteral( @Nonnull final Object input )
     {
       if ( input instanceof StringValue )
       {
@@ -121,10 +143,6 @@ public final class Scalars
           throw new CoercingParseLiteralException( message );
         }
       }
-      else if ( input instanceof NullValue )
-      {
-        return null;
-      }
       else
       {
         final String message = "Error parsing literal " + input + " as it is the incorrect type. " +
@@ -136,7 +154,12 @@ public final class Scalars
     @Nonnull
     private Date parseDate( @Nonnull final BigInteger value )
     {
-      final long epochMilli = value.longValue();
+      return parseDate( value.longValue() );
+    }
+
+    @Nonnull
+    private Date parseDate( final long epochMilli )
+    {
       return Date.from( Instant.ofEpochMilli( epochMilli ) );
     }
 
@@ -150,8 +173,9 @@ public final class Scalars
   private static class DateCoercing
     implements Coercing<Date, String>
   {
+    @Nonnull
     @Override
-    public String serialize( final Object input )
+    public String serialize( @Nonnull final Object input )
     {
       try
       {
@@ -164,39 +188,47 @@ public final class Scalars
       }
     }
 
+    @Nonnull
     @Override
-    public Date parseValue( final Object input )
+    public Date parseValue( @Nonnull final Object input )
     {
-      if ( input instanceof StringValue )
+      final Date date = doParseValue( input );
+      if ( isInvalidYear( date ) )
       {
-        final String value = ( (StringValue) input ).getValue();
+        final String message = "Date value " + input + " must be between January 1, 1753 and December 31, 9999.";
+        throw new CoercingParseValueException( message );
+      }
+
+      return date;
+    }
+
+    @Nonnull
+    private Date doParseValue( @Nonnull final Object input )
+    {
+      if ( input instanceof String )
+      {
         try
         {
-          return parseDate( value );
+          return parseDate( (String) input );
         }
         catch ( final Throwable t )
         {
-          final String message = "Error parsing literal '" + value + "'. Expected to be in the ISO local date " +
+          final String message = "Error parsing literal '" + input + "'. Expected to be in the ISO local date " +
                                  "format, such as '2011-12-03'";
           throw new CoercingParseValueException( message );
         }
       }
-      else if ( input instanceof IntValue )
+      else if ( input instanceof Number )
       {
-        final BigInteger value = ( (IntValue) input ).getValue();
         try
         {
-          return parseDate( value );
+          return parseDate( ( (Number) input ).longValue() );
         }
         catch ( final Throwable t )
         {
-          final String message = "Error parsing literal '" + value + "'. Expected to be in milliseconds since Epoch";
+          final String message = "Error parsing literal '" + input + "'. Expected to be in milliseconds since Epoch";
           throw new CoercingParseValueException( message );
         }
-      }
-      else if ( input instanceof NullValue )
-      {
-        return null;
       }
       else
       {
@@ -206,8 +238,22 @@ public final class Scalars
       }
     }
 
+    @Nonnull
     @Override
-    public Date parseLiteral( final Object input )
+    public Date parseLiteral( @Nonnull final Object input )
+    {
+      final Date date = doParseLiteral( input );
+      if ( isInvalidYear( date ) )
+      {
+        final String message = "Date value " + input + " must be between January 1, 1753 and December 31, 9999.";
+        throw new CoercingParseLiteralException( message );
+      }
+
+      return date;
+    }
+
+    @Nonnull
+    private Date doParseLiteral( @Nonnull final Object input )
     {
       if ( input instanceof StringValue )
       {
@@ -235,10 +281,6 @@ public final class Scalars
           final String message = "Error parsing literal '" + value + "'. Expected to be in milliseconds since Epoch";
           throw new CoercingParseLiteralException( message );
         }
-      }
-      else if ( input instanceof NullValue )
-      {
-        return null;
       }
       else
       {
@@ -251,7 +293,12 @@ public final class Scalars
     @Nonnull
     private Date parseDate( @Nonnull final BigInteger value )
     {
-      final long epochMilli = value.longValue();
+      return parseDate( value.longValue() );
+    }
+
+    @Nonnull
+    private Date parseDate( final long epochMilli )
+    {
       return Date.from( Instant.ofEpochMilli( epochMilli ) );
     }
 
@@ -260,5 +307,12 @@ public final class Scalars
     {
       return Date.from( LocalDate.parse( value ).atStartOfDay( ZoneId.systemDefault() ).toInstant() );
     }
+  }
+
+  @SuppressWarnings( { "deprecation", "ConstantConditions" } )
+  private static boolean isInvalidYear( @Nonnull final Date date )
+  {
+    final int year = date.getYear();
+    return ( 9999 - 1753 ) <= year && year >= ( 9999 - 1900 );
   }
 }

@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+* Further improvement to the error handling when parsing and serializing dates and datetimes. Ensure that the correct exceptions are generated when parsing or serializing fails. Ensure that the date range is within those accepted by underlying tooling.
+
 ### [v1.6.0](https://github.com/realityforge/graphql-domgen-support/tree/v1.6.0) (2019-08-14)
 [Full Changelog](https://github.com/realityforge/graphql-domgen-support/compare/v1.5.0...v1.6.0)
 
