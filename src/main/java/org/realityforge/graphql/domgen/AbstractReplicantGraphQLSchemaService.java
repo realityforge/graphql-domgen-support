@@ -13,14 +13,12 @@ public abstract class AbstractReplicantGraphQLSchemaService
   @Nonnull
   protected <T> DataFetcher<T> wrapInTransaction( @Nonnull final String key, @Nonnull final DataFetcher<T> fetcher )
   {
-    final ReplicantEnabledDataFetcher replicantEnabledDataFetcher =
-      new ReplicantEnabledDataFetcher( getReplicantSessionManager(),
-                                       getEndpoint(),
-                                       getEntityManager(),
-                                       getRegistry(),
-                                       key,
-                                       fetcher );
-    return super.wrapInTransaction( key, replicantEnabledDataFetcher );
+    return super.wrapInTransaction( key, new ReplicantEnabledDataFetcher<>( getReplicantSessionManager(),
+                                                                            getEndpoint(),
+                                                                            getEntityManager(),
+                                                                            getRegistry(),
+                                                                            key,
+                                                                            fetcher ) );
   }
 
   @Nonnull
