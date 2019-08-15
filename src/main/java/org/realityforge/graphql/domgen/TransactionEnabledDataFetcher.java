@@ -32,7 +32,7 @@ public class TransactionEnabledDataFetcher<T>
     _transactionManager.begin();
     try
     {
-      return (T) _fetcher.get( environment );
+      return _fetcher.get( environment );
     }
     catch ( final Exception e )
     {
