@@ -33,7 +33,7 @@ public abstract class AbstractGraphQLSchemaService
   }
 
   /**
-   * Return an ordered set of java resources that contain .graphqls files to define the schema.
+   * @return an ordered set of java resources that contain .graphqls files to define the schema.
    */
   @Nonnull
   protected abstract List<String> getSchemaResources();
