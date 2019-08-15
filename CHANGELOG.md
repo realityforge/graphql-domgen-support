@@ -1,5 +1,7 @@
 # Change Log
 
+### Unreleased
+
 ### [v1.8.0](https://github.com/realityforge/graphql-domgen-support/tree/v1.8.0) (2019-08-16)
 [Full Changelog](https://github.com/realityforge/graphql-domgen-support/compare/v1.7.0...v1.8.0)
 
