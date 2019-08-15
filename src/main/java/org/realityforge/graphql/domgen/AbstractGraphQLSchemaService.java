@@ -38,13 +38,13 @@ public abstract class AbstractGraphQLSchemaService
   @Nonnull
   protected abstract List<String> getSchemaResources();
 
+  @SuppressWarnings( "unchecked" )
   @Nonnull
   protected <T> DataFetcher<T> topLevelDataFetcher( @Nonnull final String key,
                                                     final boolean wrapInTransaction,
                                                     @Nonnull final DataFetcher<T> fetcher )
   {
     final DataFetcher dataFetcher = wrapInTransaction ? wrapInTransaction( key, fetcher ) : fetcher;
-    //noinspection unchecked
     return (DataFetcher<T>) getContextService().createContextualProxy( dataFetcher, DataFetcher.class );
   }
 
