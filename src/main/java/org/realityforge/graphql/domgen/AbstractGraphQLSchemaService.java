@@ -40,8 +40,8 @@ public abstract class AbstractGraphQLSchemaService
 
   @Nonnull
   protected <T> DataFetcher<T> topLevelDataFetcher( @Nonnull final String key,
-                                             final boolean wrapInTransaction,
-                                             @Nonnull final DataFetcher<T> fetcher )
+                                                    final boolean wrapInTransaction,
+                                                    @Nonnull final DataFetcher<T> fetcher )
   {
     final DataFetcher dataFetcher = wrapInTransaction ? wrapInTransaction( key, fetcher ) : fetcher;
     //noinspection unchecked
