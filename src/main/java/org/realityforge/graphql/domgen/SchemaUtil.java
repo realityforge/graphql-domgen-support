@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
-final class SchemaUtil
+public final class SchemaUtil
 {
   private SchemaUtil()
   {
   }
 
   @Nonnull
-  static GraphQLSchema buildGraphQLSchema( @Nonnull final List<String> resources,
-                                           @Nonnull final Consumer<RuntimeWiring.Builder> action )
+  public static GraphQLSchema buildGraphQLSchema( @Nonnull final List<String> resources,
+                                                  @Nonnull final Consumer<RuntimeWiring.Builder> action )
   {
     final SchemaParser schemaParser = new SchemaParser();
     final SchemaGenerator schemaGenerator = new SchemaGenerator();
