@@ -27,8 +27,7 @@ define 'graphql-domgen-support' do
                :java_dataloader,
                :reactive_streams,
                :graphql_java_servlet,
-               :guava,
-               :replicant
+               :guava
 
   package(:jar)
   package(:sources)

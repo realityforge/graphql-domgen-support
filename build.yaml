@@ -16,8 +16,6 @@ artifacts:
   jackson_databind: com.fasterxml.jackson.core:jackson-databind:jar:2.9.9
   jackson_datatype_jdk8: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.9.9
 
-  replicant: org.realityforge.replicant:replicant-server:jar:6.43
-
   graphql_java: com.graphql-java:graphql-java:jar:13.0
   slf4j_api: org.slf4j:slf4j-api:jar:1.7.25
   slf4j_jdk14: org.slf4j:slf4j-jdk14:jar:1.7.25
