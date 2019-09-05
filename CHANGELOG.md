@@ -3,10 +3,10 @@
 ### Unreleased
 
 * Remove `SimpleTypeResolver` as it is not currently used.
-* Remove `AbstractDomgenGraphQLEndpoint` as it has been merged into generated domgen class.
+* Remove `AbstractDomgenGraphQLEndpoint` as it has been merged into the generated domgen class.
 * Remove `ReplicantEnabledDataFetcher` as it has been moved to the replicant library.
-* Remove `AbstractReplicantGraphQLSchemaService` as it has been merged into generated domgen class.
-* Remove `AbstractGraphQLSchemaService` as it has been merged into generated domgen class.
+* Remove `AbstractReplicantGraphQLSchemaService` as it has been merged into the generated domgen class.
+* Remove `AbstractGraphQLSchemaService` as it has been merged into the generated domgen class.
 * Remove `SchemaUtil` as it has been merged into the generated domgen class.
 * Remove the dependency on the `replicant` library.
 
