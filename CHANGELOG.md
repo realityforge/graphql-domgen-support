@@ -7,6 +7,7 @@
 * Remove `ReplicantEnabledDataFetcher` as it has been moved to the replicant library.
 * Remove `AbstractReplicantGraphQLSchemaService` as it has been merged into generated domgen class.
 * Remove `AbstractGraphQLSchemaService` as it has been merged into generated domgen class.
+* Remove `SchemaUtil` as it has been merged into the generated domgen class.
 * Remove the dependency on the `replicant` library.
 
 ### [v1.8.0](https://github.com/realityforge/graphql-domgen-support/tree/v1.8.0) (2019-08-16)
