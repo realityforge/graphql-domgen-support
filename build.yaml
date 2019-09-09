@@ -9,7 +9,7 @@ artifacts:
 
   javaee_api: javax:javaee-api:jar:7.0
 
-  jsr305: org.realityforge.javax.annotation:javax.annotation:jar:1.0.0
+  jsr305: org.realityforge.javax.annotation:javax.annotation:jar:1.0.1
 
   jackson_annotations: com.fasterxml.jackson.core:jackson-annotations:jar:2.9.9
   jackson_core: com.fasterxml.jackson.core:jackson-core:jar:2.9.9

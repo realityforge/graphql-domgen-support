@@ -2,6 +2,7 @@
 
 ### Unreleased
 
+* Upgrade the `org.realityforge.javax.annotation` artifact to version `1.0.1`.
 * Remove `SimpleTypeResolver` as it is not currently used.
 * Remove `AbstractDomgenGraphQLEndpoint` as it has been merged into the generated domgen class.
 * Remove `ReplicantEnabledDataFetcher` as it has been moved to the replicant library.
