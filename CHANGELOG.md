@@ -2,6 +2,7 @@
 
 ### Unreleased
 
+* Upgrade the `com.google.guava` artifact to version `27.1-jre`.
 * Upgrade the `org.realityforge.javax.annotation` artifact to version `1.0.1`.
 * Remove `SimpleTypeResolver` as it is not currently used.
 * Remove `AbstractDomgenGraphQLEndpoint` as it has been merged into the generated domgen class.

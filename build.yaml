@@ -23,4 +23,4 @@ artifacts:
   java_dataloader: com.graphql-java:java-dataloader:jar:2.1.1
   reactive_streams: org.reactivestreams:reactive-streams:jar:1.0.2
   graphql_java_servlet: com.graphql-java-kickstart:graphql-java-servlet:jar:8.0.0
-  guava: com.google.guava:guava:jar:25.0-jre
+  guava: com.google.guava:guava:jar:27.1-jre
